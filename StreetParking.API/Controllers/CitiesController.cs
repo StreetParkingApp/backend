@@ -3,18 +3,13 @@
 namespace StreetParking.API.Controllers
 {
     [ApiController]
+    [Route("api/cities")]
     public class CitiesController : ControllerBase
     {
-        [HttpGet("api/cities")]
+        [HttpGet]
         public JsonResult GetCities()
         {
-
-            return new JsonResult(
-                new List<object>
-                {
-                    new {Id= 1, Name = "Miramar"},
-                    new {Id= 2, Name = "Necochea"}
-                });
+            return new JsonResult(StreetParkingStore.Current.Cities);
         }
     }
 }
