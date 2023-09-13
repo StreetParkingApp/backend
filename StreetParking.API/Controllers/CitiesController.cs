@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StreetParking.API.Models;
 
 namespace StreetParking.API.Controllers
 {
@@ -7,9 +8,24 @@ namespace StreetParking.API.Controllers
     public class CitiesController : ControllerBase
     {
         [HttpGet]
-        public JsonResult GetCities()
+        public ActionResult<IEnumerable<CityDto>> GetCities()
         {
-            return new JsonResult(StreetParkingStore.Current.Cities);
+            return Ok(new JsonResult(StreetParkingStore.Current.Cities));
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<CityDto> GetCity(int id, bool includePointsOfInterest = false)
+        {
+            var result = StreetParkingStore.Current.Cities.FirstOrDefault(x => x.Id == id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }
