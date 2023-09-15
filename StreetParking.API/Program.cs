@@ -1,8 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+using StreetParking.API.DbContexts;
+using StreetParking.API.Services;
+
+
 var builder = WebApplication.CreateBuilder(args);
-
-
-
 // Add controllers with Accept header set to default json and add xml formatters
+
+
+builder.Services.AddDbContext<StreetParkingContext>(dbContextOptions => 
+    dbContextOptions.UseMySql(builder.Configuration["ConnectionStrings:StreetParkingDbConnectionString"], 
+    ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:StreetParkingDbConnectionString"])));
+
+builder.Services.AddScoped<IStreetParkingService, StreetParkingService>();
+
+
 
 builder.Services.AddControllers(options =>
 {

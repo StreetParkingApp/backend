@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StreetParking.API.Models;
+using StreetParking.API.Services;
 
 namespace StreetParking.API.Controllers
 {
@@ -7,10 +8,19 @@ namespace StreetParking.API.Controllers
     [Route("api/cities")]
     public class CitiesController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<CityDto>> GetCities()
+        private readonly IStreetParkingService _streetParkingService;
+
+        public CitiesController(IStreetParkingService streetParkingService)
         {
-            return Ok(new JsonResult(StreetParkingStore.Current.Cities));
+            _streetParkingService = streetParkingService ?? throw new ArgumentNullException(nameof(streetParkingService));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<object>>> GetCities([FromQuery] string? name, string? searchQuery, int pageNumber = 1, int pageSize = 10)
+        {
+            var result = await _streetParkingService.GetCitiesAsync();
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
