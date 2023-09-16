@@ -17,5 +17,25 @@ namespace StreetParking.API.Services
         {
             return await _context.Cities.OrderBy(c => c.Name).ToListAsync();
         }
+
+        public async Task<City?> GetCityById(int cityId)
+        {
+            return await _context.Cities.Where(c => c.Id == cityId).FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> CityExistByNameAsync(string name)
+        {
+            return await _context.Cities.AnyAsync(c => c.Name == name);
+        }
+
+        public async Task AddCityAsync(City city)
+        {
+            await _context.Cities.AddAsync(city);
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await _context.SaveChangesAsync() > 0);
+        }
     }
 }

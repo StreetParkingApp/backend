@@ -13,6 +13,8 @@ builder.Services.AddDbContext<StreetParkingContext>(dbContextOptions =>
 
 builder.Services.AddScoped<IStreetParkingService, StreetParkingService>();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 
 builder.Services.AddControllers(options =>
